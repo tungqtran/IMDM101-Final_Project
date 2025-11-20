@@ -66,5 +66,5 @@
     "explorer.fileNesting.patterns": {
         "*.sln": "*.csproj"
     },
-    "dotnet.defaultSolution": "IMDM101-Final_Project.sln"
+    "dotnet.defaultSolution": "IMDM101-Final-Project.sln"
 }
