@@ -38,7 +38,7 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        if (Input.GetKeyDown(KeyCode.C)) // Use LeftControl to toggle crouch
+        if (Input.GetKeyDown(KeyCode.LeftControl)) // Use LeftControl to toggle crouch
         {
             ToggleCrouch();
         }
