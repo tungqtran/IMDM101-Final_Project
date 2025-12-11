@@ -5,29 +5,26 @@ public class PlayerInteract : MonoBehaviour
     private Camera playerCamera;
     [SerializeField] private float interactDistance = 3f;  
     [SerializeField] private LayerMask mask; 
-
+    private PlayerUI playerUI; 
     //Start is called before the first frame update
     void Start()
-    {
+    {   
         playerCamera = GetComponentInChildren<Camera>();
+        playerUI = GetComponent<PlayerUI>();
     }
     //Update is called once per frame
     void Update()
     {
+        playerUI.UpdateText(string.Empty);
         //create a ray from the center of the camera, shooting outwards.
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * interactDistance, Color.red);
-        if (physics.Raycast(ray, out RaycastHit hitInfo, interactDistance, mask))
+        RaycastHit hitInfo; //stores information about what was hit by the ray
+        if (Physics.Raycast(ray, out hitInfo, interactDistance, mask))
         {
-            //Check if the object we hit has an Interactable component
-            Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
-            if (interactable != null)
+            if (hitInfo.collider.GetComponent<Interactable>() != null)
             {
-                //If the player presses the E key, interact with the object
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    interactable.Interact();
-                }
+                playerUI.UpdateText(hitInfo.collider.GetComponent<Interactable>().promptmessage);
             }
         }
     }
