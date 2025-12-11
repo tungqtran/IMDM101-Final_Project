@@ -1003,11 +1003,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 6fc41910-1431-46c8-817e-bfe94cfa09ab
+  cloudProjectId: f221f418-919f-4429-b3a4-a5a95dac36ef
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: FantasyEscape
-  organizationId: thraciebear
+  organizationId: jkorondo
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
