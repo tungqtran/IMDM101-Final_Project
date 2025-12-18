@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public CharacterController controller;
-    public float baseSpeed = 12f;
-    public float gravity = -9.81f;
-    public float jumpHeight = 3f;
-    public float sprintSpeed = 5f;
+    [Header("References")]
+    [SerializeField] public CharacterController controller;
+    [Header("Movement Settings")]
+    [SerializeField] public float baseSpeed = 12f;
+    [SerializeField] public float walkSpeed = 5.0f;
+    
+    [SerializeField] public float sprintSpeed = 5f;
 
-    public float standingHeight = 2.0f;
-    public float crouchHeight = 1.0f;
-    public float walkSpeed = 5.0f;
-    public float crouchSpeed = 2.5f;
+    [Header("Physics Settings")]
+    [SerializeField] public float gravity = -9.81f;
+    [SerializeField] public float jumpHeight = 3f;
+
+
+    [Header("Crouch Settings")]
+    [SerializeField] public float standingHeight = 2.0f;
+    [SerializeField] public float crouchHeight = 1.0f;
+    
+    [SerializeField] public float crouchSpeed = 2.5f;
 
     float speedBoost = 1f;
     Vector3 velocity;
@@ -43,17 +51,28 @@ public class PlayerMovement : MonoBehaviour
             ToggleCrouch();
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        float x = Input.GetAxis("Horizontal"); // Getting A/D values or Left/Right arrows values bewteen -1 and 1
+        float z = Input.GetAxis("Vertical"); // Getting W/S values or Up/Down arrows values between -1 and 1
 
         if (Input.GetButton("Fire3"))
             speedBoost = sprintSpeed;
         else
             speedBoost = 1f;
 
-
-        Vector3 move = transform.right * x + transform.forward * z;
-
+        /* Code below does vector addtion/multiplication. Hence why it looks like it does make sense when it does.
+        transform.right and transform.forward are vectors. 
+        vectors has vector addition/multiplication properties 
+        1. Vector addition: Vector + Vector = Vector
+        2. Vector multiplication: Vector * scalar = Vector
+        So when we do transform.right * x, we are multiplying the vector transform.right with the scalar x to get a new vector.
+        Similarly, transform.forward * z gives us another vector.
+        Finally, we add the two vectors together to get the final movement vector 'move'.
+        */
+        Vector3 move = transform.right * x + transform.forward * z; 
+        /* The final move vector is then passed to controller.Move() function which moves the character controller in the direction of the move vector.
+        Note that we multiply the move vector with (baseSpeed + speedBoost) to scale the movement speed.
+        We also multiply with Time.deltaTime to make the movement frame rate independent.
+        */
         controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && controller.isGrounded)
