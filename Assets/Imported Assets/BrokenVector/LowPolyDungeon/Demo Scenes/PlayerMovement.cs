@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,6 +35,7 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         if (playerCamera != null)
         {
+            Debug.Log("Player Camera found, storing original Y position.");
             // Store the camera's original relative Y position
             originalCameraYPos = playerCamera.localPosition.y;
         }
@@ -41,8 +43,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (controller.isGrounded && velocity.y < 0)
+        if (controller.isGrounded && velocity.y < -2.0f)
         {
+            Debug.Log("Grounded - Resetting Y Velocity");
             velocity.y = -2f;
         }
 
@@ -54,31 +57,37 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal"); // Getting A/D values or Left/Right arrows values bewteen -1 and 1
         float z = Input.GetAxis("Vertical"); // Getting W/S values or Up/Down arrows values between -1 and 1
 
-        if (Input.GetButton("Fire3"))
+        if (Input.GetButton("Fire3")) // Left Shift for sprinting
             speedBoost = sprintSpeed;
         else
             speedBoost = 1f;
 
-        /* Code below does vector addtion/multiplication. Hence why it looks like it does make sense when it does.
-        transform.right and transform.forward are vectors. 
-        vectors has vector addition/multiplication properties 
-        1. Vector addition: Vector + Vector = Vector
-        2. Vector multiplication: Vector * scalar = Vector
-        So when we do transform.right * x, we are multiplying the vector transform.right with the scalar x to get a new vector.
-        Similarly, transform.forward * z gives us another vector.
-        Finally, we add the two vectors together to get the final movement vector 'move'.
+        /*transform.right and transform.forward are vectors.
+            Vector rules used here:
+            1. Vector + Vector = Vector
+            2. Vector * scalar = Vector
+
+        - transform.right * x : multiplies the right vector by the scalar x, giving us a new vector.
+        - transform.forward * z : gives us another vector.
+        - Adding these two vectors together gives us the final MOVE vector.
         */
         Vector3 move = transform.right * x + transform.forward * z; 
-        /* The final move vector is then passed to controller.Move() function which moves the character controller in the direction of the move vector.
-        Note that we multiply the move vector with (baseSpeed + speedBoost) to scale the movement speed.
-        We also multiply with Time.deltaTime to make the movement frame rate independent.
+
+        /* Concept: 
+        - MOVE vector is then passed to controller.Move() function
+        - controller.Move() moves the character controller in the direction of the move vector.
+        - Note that we multiply the move vector with (baseSpeed + speedBoost) to scale the movement speed.
+        - Multiply by Time.deltaTime so movement is frame rate independent.
         */
         controller.Move(move * (baseSpeed + speedBoost) * Time.deltaTime);
 
         if (Input.GetButtonDown("Jump") && controller.isGrounded)
         {
+            Debug.Log("Jumped");
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
+
+        
 
         velocity.y += gravity * Time.deltaTime;
 
