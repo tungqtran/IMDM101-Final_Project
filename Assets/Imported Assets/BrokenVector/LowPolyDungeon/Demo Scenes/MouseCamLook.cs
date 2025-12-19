@@ -17,7 +17,11 @@ public class MouseCamLook : MonoBehaviour
 
     void Update()
     {
-        if (GameOverScreen.activeSelf)
+        if (GameOverScreen == null)
+        {
+            return;
+        }
+        else if (GameOverScreen.activeSelf)
         {
             this.enabled = false;
             Cursor.lockState = CursorLockMode.None;
